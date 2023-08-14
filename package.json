@@ -1,0 +1,67 @@
+{
+  "name": "secondProject",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap-cloud-sdk/http-client": "^3.3.0",
+    "@sap/cds": "^6",
+    "@sap/cds-hana": "^2",
+    "@sap/xssec": "^3.3.2",
+    "express": "^4",
+    "hdb": "^0.19.0",
+    "passport": "^0.6.0"
+  },
+  "devDependencies": {
+    "@sap/ux-specification": "^1.108.10",
+    "axios": "^1.4.0",
+    "chai": "^4.3.7",
+    "chai-as-promised": "^7.1.1",
+    "chai-subset": "^1.6.0",
+    "jest": "^29.6.2",
+    "rimraf": "^3.0.2",
+    "sqlite3": "^5"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch-secondprojectfi": "cds watch --open secondprojectfi/webapp/index.html?sap-ui-xx-viewCache=false",
+    "undeploy": "cf undeploy secondProject --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
+    "test": "npx jest"
+  },
+  "cds": {
+    "requires": {
+      "db": "hana",
+      "API_PURCHASEORDER_PROCESS_SRV": {
+        "kind": "odata-v2",
+        "model": "srv/external/API_PURCHASEORDER_PROCESS_SRV",
+        "credentials": {
+          "[development]": {
+            "destination": {
+              "url": "https://sandbox.api.sap.com/s4hanacloud/sap/opu/odata/sap/API_PURCHASEORDER_PROCESS_SRV",
+              "headers": {
+                "apiKey": "FWmo14OWB9hSpsrtbAXw6K9dzADob9K3"
+              }
+            }
+          },
+          "destination": "SandboxPO"
+        }
+      },
+      "auth": {
+        "[development]": {
+          "kind": "dummy-auth"
+        },
+        "kind": "xsuaa"
+      }
+    },
+    "hana": {
+      "deploy-format": "hdbtable"
+    }
+  },
+  "sapux": [
+    "app/secondprojectfi"
+  ]
+}
